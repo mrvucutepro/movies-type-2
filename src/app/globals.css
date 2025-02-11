@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+  /* overflow-x: hidden; */
+}
+.swiper-wrapper {
+  display: flex; /* Đảm bảo các slide nằm ngang */
+  overflow: visible; /* Cho phép hiển thị đầy đủ */
+}
+
+.swiper-wrapper {
+  overflow: visible !important; /* Cho phép hiển thị slide bên phải */
+}
+
+.swiper-slide {
+  visibility: visible !important; /* Đảm bảo không bị ẩn */
+}
+/* .swiper-wrapper {
+  overflow-x: hidden; 
+}
+
+.swiper {
+  max-width: 100%;
+}
+
+.swiper-slide {
+  max-width: calc(100% / 7); 
+} */
