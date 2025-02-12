@@ -7,14 +7,22 @@ import FilmStrip from '@/assets/icons/mingcute_movie-line.png';
 import SeeMore from '@/assets/icons/solar_menu-dots-circle-linear.png';
 
 export default function MobileNav() {
+  const navMenuMobile = [
+    { image: Home, title: '홈' },
+    { image: Movie, title: '드라마' },
+    { image: PlayMovie, title: '예능' },
+    { image: FilmStrip, title: '영화' },
+    { image: SeeMore, title: '기타' },
+  ];
   return (
     <div>
-      <div className="bg-black md:hidden flex justify-between p-4">
-        <Image src={Home} alt="" />
-        <Image src={Movie} alt="" />
-        <Image src={PlayMovie} alt="" />
-        <Image src={FilmStrip} alt="" />
-        <Image src={SeeMore} alt="" />
+      <div className="bg-black md:hidden flex justify-between px-4 pb-2">
+        {navMenuMobile.map((menu, index) => (
+          <div className=" justify-items-center" key={index}>
+            <Image src={menu.image} alt="" />
+            <span>{menu.title}</span>
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -1,36 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import Category from '../Category';
-import { FetchCategoriesResponse, CategoryType, MovieType } from '@/libs/type';
+import {
+  FetchCategoriesResponse,
+  CategoryType,
+  FetchMoviesResponse,
+  MovieType,
+} from '@/libs/type';
 import { handleFetchCategories } from '@/services/category';
+import { handleFetchMovies } from '@/services/movie';
 
-export const listCategory = [
-  { title: 'Category ABC' },
-  { title: 'Category XYZ' },
-  { title: 'Category WWE' },
-  { title: 'Category XXX' },
-];
-interface ListCategoryProps {
-  movies: MovieType[];
-}
-
-export default function ListCategory({ movies }: ListCategoryProps) {
+export default function ListCategory() {
   const [categories, setCategories] = useState<CategoryType[]>([]);
+  const [movies, setMovies] = useState<MovieType[]>([]);
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchCategoriesAndMovies = async () => {
       try {
         const res: FetchCategoriesResponse = await handleFetchCategories();
+
         if (res.success) {
           setCategories(res.data);
-        } else {
-          return;
+          const defaultCategoryId = res.data[0].id;
+          const moviesRes: FetchMoviesResponse = await handleFetchMovies(
+            0,
+            0,
+            defaultCategoryId
+          );
+
+          if (moviesRes.success) {
+            setMovies(moviesRes.data.movies);
+          }
         }
       } catch (err) {
-        console.log(err);
+        console.error('Error fetching categories or movies:', err);
       }
     };
 
-    fetchCategories();
+    fetchCategoriesAndMovies();
   }, []);
 
   return (

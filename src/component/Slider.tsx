@@ -4,14 +4,14 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
-import Image, { StaticImageData } from 'next/image';
+import Image from 'next/image';
+import Movie01 from '@/assets/movie/movie-1.png';
+import Movie02 from '@/assets/movie/movie-2.png';
+import Movie03 from '@/assets/movie/movie-3.png';
 
-interface SliderProps {
-  slides: StaticImageData[];
-}
-
-const Slider: React.FC<SliderProps> = ({ slides }) => {
+const Slider = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const images = [Movie01, Movie02, Movie03];
 
   return (
     <div
@@ -28,7 +28,7 @@ const Slider: React.FC<SliderProps> = ({ slides }) => {
         style={{ height: '60vh', margin: '0 18px', overflow: 'hidden' }}
         onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
       >
-        {slides.map((slide, index) => (
+        {images.map((slide, index) => (
           <SwiperSlide
             key={index}
             style={{

@@ -5,10 +5,12 @@ import CardMovie from '../CardMovie';
 // import { paginate } from '@/libs/helpers/pagonationHelper';
 import PaginationButton from '../Base/PaginationButton';
 import { CategoryType, ITEMS_PER_PAGE, MovieType } from '@/libs/type';
-import { handleFetchMovies } from '@/services/movie';
+import { handleFetchMovieByID, handleFetchMovies } from '@/services/movie';
+import { useMovie } from '@/hooks/useMoviesContext';
 
 export default function CategoryDetail({ id, name }: CategoryType) {
   const [movies, setMovies] = useState<MovieType[]>([]);
+  const { setMovie, setCategory } = useMovie();
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageGroup, setPageGroup] = useState(1);
@@ -17,6 +19,7 @@ export default function CategoryDetail({ id, name }: CategoryType) {
   const fetchMovies = async (page: number, limit: number) => {
     try {
       const res = await handleFetchMovies(page, limit, id);
+
       if (res.success) {
         setMovies(res.data.movies);
         setTotalPages(Math.ceil(res.data.total / limit));
@@ -57,6 +60,25 @@ export default function CategoryDetail({ id, name }: CategoryType) {
     }
   };
 
+  const handleSelectMovie = async (movieId: string) => {
+    try {
+      const res = await handleFetchMovieByID(movieId);
+      const movieData: MovieType = {
+        id: res.data.id,
+        title_id: parseInt(res.data.id),
+        title: res.data.des,
+        des: res.data.des,
+        cate_id: res.data.cate_id,
+        image: res.data.image,
+      };
+      if (res.success) {
+        setMovie(movieData);
+      }
+    } catch (error) {
+      console.error('Error fetching movie id:', error);
+    }
+  };
+
   return (
     <div>
       <div className="mx-4">
@@ -68,9 +90,10 @@ export default function CategoryDetail({ id, name }: CategoryType) {
         <div className="mt-4 grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {movies.map((movie, index) => (
             <CardMovie
+              key={index}
+              onClick={() => handleSelectMovie(movie.id)}
               movieImage={movie.image}
               movieName={movie.title}
-              key={index}
             />
           ))}
         </div>

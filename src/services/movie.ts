@@ -1,5 +1,5 @@
 import { customFetch } from '@/libs/helpers/customFetch';
-import { FetchMoviesResponse } from '@/libs/type';
+import { FetchMovieDetailResponse, FetchMoviesResponse } from '@/libs/type';
 
 export const handleFetchMovies = async (
   page: number,
@@ -15,4 +15,13 @@ export const handleFetchMovies = async (
     method: 'GET',
   });
   return res as FetchMoviesResponse;
+};
+
+export const handleFetchMovieByID = async (
+  id: string
+): Promise<FetchMovieDetailResponse> => {
+  const res = await customFetch(`/movies/${id}`, {
+    method: 'GET',
+  });
+  return res as FetchMovieDetailResponse;
 };

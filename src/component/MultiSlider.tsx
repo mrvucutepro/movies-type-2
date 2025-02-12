@@ -60,11 +60,7 @@ export default function MultiSlider({ movies }: MovieSliderProps) {
               className=""
               style={{ width: `${100 / visibleCount}%` }}
             >
-              <CardMovie
-                movieName={movie.des}
-                movieTitle={movie.title}
-                movieImage={movie.image}
-              />
+              <CardMovie movieName={movie.title} movieImage={movie.image} />
             </div>
           ))}
         </div>
@@ -73,10 +69,10 @@ export default function MultiSlider({ movies }: MovieSliderProps) {
       <button
         onClick={handlePrev}
         disabled={currentIndex === 0}
-        className={`absolute opacity-30 focus:opacity-90 top-1/2 left-0 transform -translate-y-1/2 px-2 py-1 rounded-full ${
+        className={` absolute opacity-90 focus:opacity-60 top-1/2 left-0 transform -translate-y-1/2 px-2 py-1 rounded-full ${
           currentIndex === 0
             ? 'bg-gray-300 cursor-not-allowed'
-            : 'bg-gray-600 hover:bg-gray-800'
+            : 'bg-gray-600 hover:bg-gray-700 '
         }`}
       >
         <Image
@@ -90,10 +86,10 @@ export default function MultiSlider({ movies }: MovieSliderProps) {
       <button
         onClick={handleNext}
         disabled={currentIndex >= totalMovies - visibleCount}
-        className={`absolute opacity-30 focus:opacity-90 top-1/2 right-0 transform -translate-y-1/2 px-2 py-1 rounded-full ${
+        className={`absolute opacity-90 focus:opacity-60 top-1/2 right-0 transform -translate-y-1/2 px-2 py-1 rounded-full ${
           currentIndex >= totalMovies - visibleCount
             ? 'bg-gray-300 cursor-not-allowed'
-            : 'bg-gray-600 hover:bg-gray-800'
+            : 'bg-gray-600 hover:bg-gray-700 '
         }`}
       >
         <Image

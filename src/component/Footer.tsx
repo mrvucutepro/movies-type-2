@@ -4,7 +4,7 @@ import Logo from '@/assets/logo/logo.png';
 
 export default function Footer() {
   return (
-    <div className="p-4 text-xs bg-black border border-[#505050] border-t-1 border-b-0 border-x-0 my-4">
+    <div className="p-4 text-xs bg-black border border-[#505050] border-t-1 border-b-0 border-x-0 mt-4">
       <Image src={Logo} alt="Logo" height={20} />
       <div className="gap-4 grid my-2">
         <span>MOA TV 다시보기 서비스 입니다</span>
