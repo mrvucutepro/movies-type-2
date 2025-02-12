@@ -9,7 +9,7 @@ import SeeMore from '@/assets/icons/solar_menu-dots-circle-linear.png';
 export default function MobileNav() {
   return (
     <div>
-      <div className="bg-black md:hidden flex justify-between p-4 m-4">
+      <div className="bg-black md:hidden flex justify-between p-4">
         <Image src={Home} alt="" />
         <Image src={Movie} alt="" />
         <Image src={PlayMovie} alt="" />

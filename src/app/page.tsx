@@ -12,35 +12,42 @@ import Movie02 from '@/assets/movie/movie-2.png';
 import Movie03 from '@/assets/movie/movie-3.png';
 import { useState } from 'react';
 import CategoryDetail from '@/component/CategoryDetail';
+import { CategoryType, MovieType } from '@/libs/type';
 
 export default function Home() {
-  const [category, setCategory] = useState('Home');
+  const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(
+    null
+  );
+  // const [movies, setMovies] = useState<MovieType[]>([]);
   const images = [Movie01, Movie02, Movie03];
-  const isHome = category === 'Home';
+  const isHome = selectedCategory?.name === 'Home';
 
   return (
     <>
       <Header />
       <div className="flex">
-        <NavBar onCategorySelect={setCategory} />
+        <NavBar onCategorySelect={setSelectedCategory} />
         <div className="w-full">
           <Title />
           {isHome ? (
             <>
               <Slider slides={images} />
               <Advertisement />
-              <ListCategory />
+              {/* <ListCategory movies={movies} /> */}
             </>
           ) : (
-            category !== 'Home' && (
+            !isHome && (
               <>
                 <Advertisement />
-                <CategoryDetail category={category} />
+                <CategoryDetail
+                  name={selectedCategory?.name ?? ''}
+                  id={Number(selectedCategory?.id)}
+                />
               </>
             )
           )}
-          <MobileNav />
           <Footer />
+          <MobileNav />
         </div>
       </div>
     </>

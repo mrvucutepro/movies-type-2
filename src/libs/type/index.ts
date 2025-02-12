@@ -33,3 +33,5 @@ export interface FetchMoviesResponse {
   };
   success: boolean;
 }
+
+export const ITEMS_PER_PAGE = 10;

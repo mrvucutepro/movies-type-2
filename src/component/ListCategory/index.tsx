@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Category from '../Category';
-import {
-  FetchCategoriesResponse,
-  CategoryType,
-  FetchMoviesResponse,
-  MovieType,
-} from '@/libs/type';
+import { FetchCategoriesResponse, CategoryType, MovieType } from '@/libs/type';
 import { handleFetchCategories } from '@/services/category';
-import { handleFetchMovies } from '@/services/movie';
 
 export const listCategory = [
   { title: 'Category ABC' },
@@ -15,10 +9,12 @@ export const listCategory = [
   { title: 'Category WWE' },
   { title: 'Category XXX' },
 ];
+interface ListCategoryProps {
+  movies: MovieType[];
+}
 
-export default function ListCategory() {
+export default function ListCategory({ movies }: ListCategoryProps) {
   const [categories, setCategories] = useState<CategoryType[]>([]);
-  const [movies, setMovies] = useState<MovieType[]>([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -37,28 +33,15 @@ export default function ListCategory() {
     fetchCategories();
   }, []);
 
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const res: FetchMoviesResponse = await handleFetchMovies();
-        if (res.success) {
-          setMovies(res.data);
-        } else {
-          return;
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    fetchMovies();
-  }, []);
-
   return (
     <>
       <div>
         {categories.map((category) => (
-          <Category key={category.id} category={category.name} />
+          <Category
+            key={category.id}
+            category={category.name ?? ''}
+            movies={movies}
+          />
         ))}
       </div>
     </>

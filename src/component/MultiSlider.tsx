@@ -5,14 +5,10 @@ import CardMovie from './CardMovie';
 import Image from 'next/image';
 import ArrowLeft from '@/assets/icons/arrow-left.png';
 import ArrowRight from '@/assets/icons/arrow-right.png';
-
-interface Movie {
-  name: string;
-  title: string;
-}
+import { MovieType } from '@/libs/type';
 
 interface MovieSliderProps {
-  movies: Movie[];
+  movies: MovieType[];
 }
 
 export default function MultiSlider({ movies }: MovieSliderProps) {
@@ -64,7 +60,11 @@ export default function MultiSlider({ movies }: MovieSliderProps) {
               className=""
               style={{ width: `${100 / visibleCount}%` }}
             >
-              <CardMovie movieName={movie.name} movieTitle={movie.title} />
+              <CardMovie
+                movieName={movie.des}
+                movieTitle={movie.title}
+                movieImage={movie.image}
+              />
             </div>
           ))}
         </div>

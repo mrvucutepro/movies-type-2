@@ -3,6 +3,7 @@ interface PaginationButtonProps {
   onClick: () => void;
   disabled?: boolean;
   isActive?: boolean;
+  className?: string;
 }
 
 export default function PaginationButton({

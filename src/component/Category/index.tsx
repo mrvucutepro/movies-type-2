@@ -1,37 +1,16 @@
 import React from 'react';
-// import CardMovie from '../CardMovie';
 import Image from 'next/image';
 import MovieIcon from '@/assets/icons/ic_baseline-local-movies.png';
 import MultiSlider from '../MultiSlider';
 import Button from '../Base/Button';
+import { MovieType } from '@/libs/type';
 
 interface CategoryProps {
   category: string;
+  movies: MovieType[];
 }
 
-interface Movie {
-  name: string;
-  title: string;
-}
-
-export default function Category({ category }: CategoryProps) {
-  const movies: Movie[] = [
-    { name: 'ABC', title: 'Title ABC' },
-    { name: 'XYZ', title: 'Title XYZ' },
-    { name: 'WWE', title: 'Title WWE' },
-    { name: 'XXX', title: 'Title XXX' },
-    { name: 'YYY', title: 'Title YYY' },
-    { name: 'ZZZ', title: 'Title ZZZ' },
-    { name: 'NYC', title: 'Title NYC' },
-    { name: 'ABC', title: 'Title ABC' },
-    { name: 'XYZ', title: 'Title XYZ' },
-    { name: 'WWE', title: 'Title WWE' },
-    { name: 'XXX', title: 'Title XXX' },
-    { name: 'YYY', title: 'Title YYY' },
-    { name: 'ZZZ', title: 'Title ZZZ' },
-    { name: 'NYC', title: 'Title NYC' },
-  ];
-
+export default function Category({ category, movies }: CategoryProps) {
   return (
     <div className="mx-4">
       <div className="bg-black absolute left-0 w-10" />

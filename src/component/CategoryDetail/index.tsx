@@ -4,94 +4,106 @@ import MovieIcon from '@/assets/icons/ic_baseline-local-movies.png';
 import CardMovie from '../CardMovie';
 // import { paginate } from '@/libs/helpers/pagonationHelper';
 import PaginationButton from '../Base/PaginationButton';
+import { CategoryType, ITEMS_PER_PAGE, MovieType } from '@/libs/type';
 import { handleFetchMovies } from '@/services/movie';
-import { MovieType } from '@/libs/type';
 
-interface CategoryProps {
-  category: string;
-}
-const ITEMS_PER_PAGE = 20;
-
-export default function CategoryDetail({ category }: CategoryProps) {
+export default function CategoryDetail({ id, name }: CategoryType) {
   const [movies, setMovies] = useState<MovieType[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageGroup, setPageGroup] = useState(1);
+  const buttonPerPage = 5;
 
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const res = await handleFetchMovies(currentPage, ITEMS_PER_PAGE);
-        if (res.success) {
-          const filteredMovies = res.data.movies.filter(
-            (movie) => movie.cate_id.toString() === category
-          );
-          setMovies({ filteredMovies } as any);
-          setTotalPages(Math.ceil(res.data.total / ITEMS_PER_PAGE));
-        }
-      } catch (error) {
-        console.error('Failed to fetch movies:', error);
+  const fetchMovies = async (page: number, limit: number) => {
+    try {
+      const res = await handleFetchMovies(page, limit, id);
+      if (res.success) {
+        setMovies(res.data.movies);
+        setTotalPages(Math.ceil(res.data.total / limit));
       }
-    };
-
-    fetchMovies();
-  }, [category, currentPage]);
-
-  const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prev) => prev - 1);
+    } catch (error) {
+      console.error('Error fetching movies:', error);
     }
   };
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage((prev) => prev + 1);
-    }
+  useEffect(() => {
+    fetchMovies(currentPage, ITEMS_PER_PAGE);
+  }, [currentPage, id]);
+
+  const getPageNumbers = () => {
+    const startPage = (pageGroup - 1) * buttonPerPage + 1;
+    const endPage = Math.min(startPage + buttonPerPage - 1, totalPages);
+    return Array.from(
+      { length: endPage - startPage + 1 },
+      (_, i) => startPage + i
+    );
   };
 
   const handlePageClick = (page: number) => {
-    setCurrentPage(page);
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
   };
+
+  const handleNextPageGroup = () => {
+    if (pageGroup * buttonPerPage < totalPages) {
+      setPageGroup(pageGroup + 1);
+    }
+  };
+
+  const handlePrevPageGroup = () => {
+    if (pageGroup > 1) {
+      setPageGroup(pageGroup - 1);
+    }
+  };
+
   return (
     <div>
       <div className="mx-4">
         <div className="bg-black absolute left-0 w-10" />
         <div className="flex items-center gap-2 mt-4">
           <Image alt="" src={MovieIcon} height={20} />
-          <span className="font-bold text-xl">{category}</span>
+          <span className="font-bold text-xl">{name}</span>
         </div>
         <div className="mt-4 grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {movies.map((movie, index) => (
             <CardMovie
               movieImage={movie.image}
-              movieName={movie.des}
-              movieTitle={movie.title}
+              movieName={movie.title}
               key={index}
             />
           ))}
         </div>
-        <div className="mt-6 flex justify-center items-center space-x-4">
-          <PaginationButton
-            label="<"
-            onClick={handlePreviousPage}
-            disabled={currentPage === 1}
-          />
-
-          {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-            (page) => (
-              <PaginationButton
-                key={page}
-                label={page.toString()}
-                onClick={() => handlePageClick(page)}
-                isActive={page === currentPage}
-              />
-            )
+        <div className="mt-24 flex justify-center items-center space-x-4">
+          {pageGroup > 1 && (
+            <PaginationButton
+              label="<"
+              onClick={handlePrevPageGroup}
+              disabled={currentPage === 1 && pageGroup === 1}
+            />
           )}
 
-          <PaginationButton
-            label=">"
-            onClick={handleNextPage}
-            disabled={currentPage === totalPages}
-          />
+          {getPageNumbers().map((page) => (
+            <PaginationButton
+              key={page}
+              label={page.toString()}
+              isActive={page === currentPage}
+              onClick={() => handlePageClick(page)}
+              className={`px-3 py-2 rounded-lg ${
+                page === currentPage
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-200 hover:bg-gray-300'
+              }`}
+            />
+          ))}
+
+          {pageGroup * buttonPerPage < totalPages && (
+            <PaginationButton
+              label=">"
+              onClick={handleNextPageGroup}
+              disabled={currentPage === totalPages}
+            />
+          )}
         </div>
       </div>
     </div>
