@@ -19,6 +19,7 @@ export default function NavBar({
 
   useEffect(() => {
     const fetchCategories = async () => {
+      showLoading();
       try {
         const res: FetchCategoriesResponse = await handleFetchCategories();
 
@@ -29,6 +30,8 @@ export default function NavBar({
         }
       } catch (err) {
         console.error('Error fetching categories:', err);
+      } finally {
+        hideLoading();
       }
     };
 

@@ -7,25 +7,52 @@ import PaginationButton from '../Base/PaginationButton';
 import { CategoryType, ITEMS_PER_PAGE, MovieType } from '@/libs/type';
 import { handleFetchMovieByID, handleFetchMovies } from '@/services/movie';
 import { useMovie } from '@/hooks/useMoviesContext';
+import { useLoading } from '@/contexts/LoadingContext';
 
 export default function CategoryDetail({ id, name }: CategoryType) {
   const [movies, setMovies] = useState<MovieType[]>([]);
-  const { setMovie, setCategory } = useMovie();
+  const { setMovie } = useMovie();
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageGroup, setPageGroup] = useState(1);
   const buttonPerPage = 5;
+  const { showLoading, hideLoading } = useLoading();
+  const [moviesCache, setMoviesCache] = useState<{
+    [page: number]: MovieType[];
+  }>({});
 
   const fetchMovies = async (page: number, limit: number) => {
     try {
+      showLoading();
       const res = await handleFetchMovies(page, limit, id);
 
       if (res.success) {
         setMovies(res.data.movies);
         setTotalPages(Math.ceil(res.data.total / limit));
+        // setMoviesCache((prev) => ({ ...prev, [page]: res.data.movies }));
+        if (!moviesCache[page + 1] && page + 1 <= totalPages) {
+          const nextRes = await handleFetchMovies(page + 1, limit, id);
+          if (nextRes.success) {
+            setMoviesCache((prev) => ({
+              ...prev,
+              [page + 1]: nextRes.data.movies,
+            }));
+          }
+        }
+        if (!moviesCache[page - 1] && page - 1 > 0) {
+          const prevRes = await handleFetchMovies(page - 1, limit, id);
+          if (prevRes.success) {
+            setMoviesCache((prev) => ({
+              ...prev,
+              [page - 1]: prevRes.data.movies,
+            }));
+          }
+        }
       }
     } catch (error) {
       console.error('Error fetching movies:', error);
+    } finally {
+      hideLoading();
     }
   };
 
@@ -45,6 +72,7 @@ export default function CategoryDetail({ id, name }: CategoryType) {
   const handlePageClick = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
+      fetchMovies(page, ITEMS_PER_PAGE);
     }
   };
 
@@ -70,6 +98,9 @@ export default function CategoryDetail({ id, name }: CategoryType) {
         des: res.data.des,
         cate_id: res.data.cate_id,
         image: res.data.image,
+        actor: res.data.actor,
+        actor_images: null,
+        episodes: [],
       };
       if (res.success) {
         setMovie(movieData);

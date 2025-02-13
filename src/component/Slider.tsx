@@ -22,10 +22,10 @@ const Slider = () => {
         modules={[Navigation]}
         navigation
         loop={true}
-        spaceBetween={1}
+        spaceBetween={200}
         centeredSlides={true}
         slidesPerView={'auto'}
-        style={{ height: '60vh', margin: '0 18px', overflow: 'hidden' }}
+        style={{ height: '50vh', margin: '0 18px', overflow: 'hidden' }}
         onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
       >
         {images.map((slide, index) => (
@@ -36,6 +36,7 @@ const Slider = () => {
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
+              height: '100%',
               width: index === activeIndex ? '50%' : '40%',
               overflow: 'hidden',
             }}
@@ -57,7 +58,7 @@ const Slider = () => {
               src={slide.src}
               alt={`Slide ${index + 1}`}
               fill
-              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 40vw, 40vw"
+              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 50vw, 50vw"
               style={{
                 objectFit: 'contain',
                 zIndex: 0,

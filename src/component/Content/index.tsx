@@ -18,9 +18,15 @@ export default function Content({ selectedCategory }: any) {
       <Title />
       {isHome ? (
         <>
-          <Slider />
-          <Advertisement />
-          <ListCategory />
+          {!movie ? (
+            <>
+              <Slider />
+              <Advertisement />
+              <ListCategory />
+            </>
+          ) : (
+            <DetailMovie />
+          )}
         </>
       ) : (
         <>

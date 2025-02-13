@@ -4,7 +4,10 @@ export interface MovieType {
   title: string;
   des: string;
   cate_id: number;
+  actor: string | null;
   image: string;
+  actor_images: string[] | null;
+  episodes: EpisodeType[];
 }
 
 export interface CategoryType {

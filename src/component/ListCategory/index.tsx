@@ -8,31 +8,41 @@ import {
 } from '@/libs/type';
 import { handleFetchCategories } from '@/services/category';
 import { handleFetchMovies } from '@/services/movie';
+import { useMovie } from '@/hooks/useMoviesContext';
 
 export default function ListCategory() {
-  const [categories, setCategories] = useState<CategoryType[]>([]);
-  const [movies, setMovies] = useState<MovieType[]>([]);
-
+  const { movie } = useMovie();
+  const [categoriesWithMovies, setCategoriesWithMovies] = useState<
+    { category: CategoryType; movies: MovieType[] }[]
+  >([]);
   useEffect(() => {
     const fetchCategoriesAndMovies = async () => {
       try {
-        const res: FetchCategoriesResponse = await handleFetchCategories();
+        const categoriesRes: FetchCategoriesResponse =
+          await handleFetchCategories();
+        if (categoriesRes.success) {
+          const categories = categoriesRes.data;
 
-        if (res.success) {
-          setCategories(res.data);
-          const defaultCategoryId = res.data[0].id;
-          const moviesRes: FetchMoviesResponse = await handleFetchMovies(
-            0,
-            0,
-            defaultCategoryId
+          const fetchMoviesPromises = categories.map(async (category) => {
+            const moviesRes: FetchMoviesResponse = await handleFetchMovies(
+              0,
+              0,
+              category.id
+            );
+            return {
+              category,
+              movies: moviesRes.success ? moviesRes.data.movies : [],
+            };
+          });
+
+          const categoriesWithMoviesData = await Promise.all(
+            fetchMoviesPromises
           );
 
-          if (moviesRes.success) {
-            setMovies(moviesRes.data.movies);
-          }
+          setCategoriesWithMovies(categoriesWithMoviesData);
         }
-      } catch (err) {
-        console.error('Error fetching categories or movies:', err);
+      } catch (error) {
+        console.error('Error fetching categories or movies:', error);
       }
     };
 
@@ -42,13 +52,29 @@ export default function ListCategory() {
   return (
     <>
       <div>
-        {categories.map((category) => (
+        {movie ? (
           <Category
-            key={category.id}
-            category={category.name ?? ''}
-            movies={movies}
+            key={movie.cate_id}
+            category={
+              categoriesWithMovies.find(
+                (item) => item.category.id === movie.cate_id
+              )?.category.name ?? ''
+            }
+            movies={
+              categoriesWithMovies.find(
+                (item) => item.category.id === movie.cate_id
+              )?.movies ?? []
+            }
           />
-        ))}
+        ) : (
+          categoriesWithMovies.map(({ category, movies }) => (
+            <Category
+              key={category.id}
+              category={category.name ?? ''}
+              movies={movies}
+            />
+          ))
+        )}
       </div>
     </>
   );

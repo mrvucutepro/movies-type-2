@@ -19,7 +19,7 @@ export default function CardMovie({
     <div className=" py-3" onClick={onClick}>
       <Image
         src={movieImage}
-        className=" rounded-lg hover:scale-105 transform transition-transform duration-300"
+        className=" object-cover max-h-[30vh] rounded-lg hover:scale-105 transform transition-transform duration-300"
         alt=""
         height={0}
         width={300}

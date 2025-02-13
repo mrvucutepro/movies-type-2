@@ -14,7 +14,7 @@ export default function Loading({ size = 'xxl', className }: SpinnerProps) {
 
   return (
     <div
-      className={`${className} flex border-4 border-[#d9b87a] border-t-transparent border-spacing-3 rounded-full animate-spin ${sizeClasses[size]}`}
+      className={`${className} flex border-4 border-[#EA1616] border-t-transparent border-spacing-3 rounded-full animate-spin ${sizeClasses[size]}`}
     ></div>
   );
 }
