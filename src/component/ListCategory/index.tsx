@@ -55,7 +55,7 @@ export default function ListCategory() {
         {movie ? (
           <Category
             key={movie.cate_id}
-            category={
+            categorySelected={
               categoriesWithMovies.find(
                 (item) => item.category.id === movie.cate_id
               )?.category.name ?? ''
@@ -70,7 +70,7 @@ export default function ListCategory() {
           categoriesWithMovies.map(({ category, movies }) => (
             <Category
               key={category.id}
-              category={category.name ?? ''}
+              categorySelected={category.name ?? ''}
               movies={movies}
             />
           ))

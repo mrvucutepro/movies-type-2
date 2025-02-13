@@ -1,25 +1,26 @@
 // import { useMovie } from '@/hooks/useMoviesContext';
-import React from 'react';
+import React, { useState } from 'react';
 import Episode from '../Episode';
 import MovieInfomation from '../MovieInfomation';
 import Comment from '../Comment/CommentWriteArea';
-import { useMovie } from '@/hooks/useMoviesContext';
 import ListCategory from '../ListCategory';
-// import { handleFetchMovieByID } from '@/services/movie';
-// import { EpisodeType, FetchMovieDetailResponse } from '@/libs/type';
+import MoviePlayer from '../MoviePlayer.tsx';
+import { useMovie } from '@/hooks/useMoviesContext';
 
 export default function DetailMovie() {
+  const { movie } = useMovie();
+  const [videoUrl, setVideoUrl] = useState('');
+  const [thumbnaiUrl, setThumbnailUrl] = useState('');
+
+  const handleVideoSelect = (url: string) => {
+    setVideoUrl(url);
+    setThumbnailUrl(movie?.image ?? '');
+  };
+
   return (
     <>
-      <div className="mt-4 px-4">
-        <video
-          src="https://youtu.be/lCRHkMZ35MQ?list=RDlCRHkMZ35MQ"
-          className="w-[100vw] "
-          height="680"
-          controls
-        />
-      </div>
-      <Episode />
+      <MoviePlayer videoUrl={videoUrl} thumbnail={thumbnaiUrl} />
+      <Episode onVideoSelect={handleVideoSelect} />
       <MovieInfomation />
       <Comment />
       <ListCategory />

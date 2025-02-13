@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Button from './Base/Button';
 import { handleFetchCategories } from '@/services/category';
 import { CategoryType, FetchCategoriesResponse } from '@/libs/type';
-import { useLoading } from '@/contexts/LoadingContext';
 import { useMovie } from '@/hooks/useMoviesContext';
 
 export default function NavBar({
@@ -10,7 +9,6 @@ export default function NavBar({
 }: {
   onCategorySelect: (category: CategoryType | null) => void;
 }) {
-  const { showLoading, hideLoading } = useLoading();
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(
     null
@@ -19,7 +17,6 @@ export default function NavBar({
 
   useEffect(() => {
     const fetchCategories = async () => {
-      showLoading();
       try {
         const res: FetchCategoriesResponse = await handleFetchCategories();
 
@@ -30,8 +27,6 @@ export default function NavBar({
         }
       } catch (err) {
         console.error('Error fetching categories:', err);
-      } finally {
-        hideLoading();
       }
     };
 
@@ -40,14 +35,11 @@ export default function NavBar({
 
   const handleCategoryClick = async (category: CategoryType) => {
     try {
-      showLoading();
       setMovie(null);
       setSelectedCategory(category);
       onCategorySelect(category);
     } catch (error) {
       console.error('Error while fetching movies:', error);
-    } finally {
-      hideLoading();
     }
   };
 

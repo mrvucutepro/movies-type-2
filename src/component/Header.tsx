@@ -3,21 +3,16 @@ import Input from './Base/Input';
 import Image from 'next/image';
 import SearchIcon from '@/assets/icons/search-icon.png';
 import Logo from '@/assets/logo/logo.png';
-import { useLoading } from '@/contexts/LoadingContext';
 import { useRouter } from 'next/navigation';
 
 export default function Header() {
-  const { showLoading, hideLoading } = useLoading();
   const router = useRouter();
 
   const handleDirection = async () => {
-    showLoading();
     try {
       await router.push('/');
     } catch (error) {
       console.log(error);
-    } finally {
-      hideLoading();
     }
   };
 

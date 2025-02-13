@@ -1,37 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '../Base/Button';
 import { useMovie } from '@/hooks/useMoviesContext';
-// import { EpisodeType } from '@/libs/type';
 
-export default function Episode() {
+export default function Episode({
+  onVideoSelect,
+}: {
+  onVideoSelect: (videoUrl: string) => void;
+}) {
   const { movie } = useMovie();
+  const [selectedVideoUrl, setSelectedVideoUrl] = useState('');
 
-  // const [listEpisode, setListEpisode] = useState<EpisodeType[]>([]);
-
-  console.log(movie);
+  const selectEpisode = (videoUrl: string) => {
+    setSelectedVideoUrl(videoUrl);
+    onVideoSelect(videoUrl);
+  };
 
   return (
-    <div className="flex gap-4 m-4 p-4 items-center bg-[#313131] rounded-sm">
-      <span className="font-bold text-2xl">영화 목록</span>
-      {movie?.episodes.map((value, index) => (
-        <>
-          {movie?.episodes.length === 0 ? (
+    <div className="m-4 p-4 bg-[#313131] rounded-sm">
+      <span className="font-bold text-2xl whitespace-nowrap">영화 목록</span>
+      <div className="flex flex-wrap gap-4 mt-2">
+        {movie?.episodes.length === 0 ? (
+          <Button label="FULL" className="bg-[#EA1616] rounded-sm" />
+        ) : (
+          movie?.episodes.map((episode, index) => (
             <Button
-              key={index}
-              label="abc"
-              className="bg-[#EA1616] rounded-sm"
+              onClick={() => selectEpisode(episode.video_url)}
+              key={episode.id || index}
+              label={index.toString()}
+              className="bg-[#EA1616] focus:bg-[#191919] focus:text-white rounded-sm font-bold text-lg w-20 !h-8 hover:bg-[#191919] duration-100"
             />
-          ) : (
-            <Button
-              key={index}
-              label="abc"
-              className="bg-[#EA1616] rounded-sm"
-            />
-          )}
-        </>
-      ))}
-
-      {/* <Button label="abc" className="bg-[#191919]  rounded-sm" /> */}
+          ))
+        )}
+      </div>
     </div>
   );
 }

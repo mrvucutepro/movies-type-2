@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Avatar from '@/assets/logo/avatar.png';
 export default function CommentDisplay() {
   return (
-    <div className=" flex m-2 p-1 gap-4">
+    <div className=" flex m-2 p-1 gap-4  border border-t-0 border-x-0 py-2 border-black">
       <Image
         alt=""
         src={Avatar}

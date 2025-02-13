@@ -1,6 +1,5 @@
-import Image from 'next/image';
 import React from 'react';
-// import Movie03 from '@/assets/movie/movie-3.png';
+import ImageCustom from '../Base/ImageCustom';
 
 interface CardMovieProps {
   movieName: string;
@@ -16,15 +15,8 @@ export default function CardMovie({
   onClick,
 }: CardMovieProps) {
   return (
-    <div className=" py-3" onClick={onClick}>
-      <Image
-        src={movieImage}
-        className=" object-cover max-h-[30vh] rounded-lg hover:scale-105 transform transition-transform duration-300"
-        alt=""
-        height={0}
-        width={300}
-      />
-      <div className="text-base font-medium break-words mt-6">{movieName}</div>
+    <div className="relative z-10 py-3" onClick={onClick}>
+      <ImageCustom movieImage={movieImage} movieName={movieName} />
       <div className="text-xs break-words">{movieTitle}</div>
     </div>
   );

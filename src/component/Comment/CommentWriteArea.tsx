@@ -20,6 +20,7 @@ export default function Comment() {
         }
       ></CommentArea>
       <CommentDisplay />
+      <CommentDisplay />
     </div>
   );
 }

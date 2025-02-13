@@ -41,7 +41,7 @@ const CommentArea: React.FC<CommentAreaProps> = ({
           placeholder={placeholder}
           className={`${
             underline ? 'border-b' : 'border'
-          } text-sm border-x-0 border-t-0 w-[100%]  mx-4 content-center bg-[#2F2F2F] rounded-xl border-[#2F2F2e] shadow-lg px-4  focus:outline-none ${
+          } text-sm border-x-0 border-t-0 w-[100%] h-10  mx-4 content-center bg-[#2F2F2F] rounded-xl border-[#2F2F2e] shadow-lg px-4  focus:outline-none ${
             startContext ? 'pl-10' : ''
           } ${classNameInput}`}
         />

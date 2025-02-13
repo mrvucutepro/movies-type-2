@@ -22,48 +22,53 @@ const Slider = () => {
         modules={[Navigation]}
         navigation
         loop={true}
-        spaceBetween={200}
+        spaceBetween={0}
+        slidesPerView={3}
         centeredSlides={true}
-        slidesPerView={'auto'}
-        style={{ height: '50vh', margin: '0 18px', overflow: 'hidden' }}
         onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+        style={{ height: '60vh', overflow: 'hidden' }}
       >
         {images.map((slide, index) => (
           <SwiperSlide
             key={index}
             style={{
-              position: 'relative',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              height: '100%',
-              width: index === activeIndex ? '50%' : '40%',
-              overflow: 'hidden',
             }}
           >
-            {index !== activeIndex && (
-              <div
+            <div
+              style={{
+                position: 'relative',
+                width: index === activeIndex ? '80%' : '20%',
+                transition: 'width 0.3s ease',
+                height: '100%',
+                overflow: 'hidden',
+              }}
+            >
+              {index !== activeIndex && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    zIndex: 1,
+                  }}
+                />
+              )}
+              <Image
+                src={slide.src}
+                alt=""
+                fill
+                sizes="(max-width: 1200px) 60vw, 60vw"
                 style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                  zIndex: 1,
+                  objectFit: 'contain',
+                  zIndex: 0,
                 }}
               />
-            )}
-            <Image
-              src={slide.src}
-              alt={`Slide ${index + 1}`}
-              fill
-              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 50vw, 50vw"
-              style={{
-                objectFit: 'contain',
-                zIndex: 0,
-              }}
-            />
+            </div>
           </SwiperSlide>
         ))}
       </Swiper>

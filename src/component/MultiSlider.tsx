@@ -34,15 +34,15 @@ export default function MultiSlider({ movies }: MovieSliderProps) {
   }, []);
 
   const handlePrev = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex((prevIndex) => prevIndex - 1);
-    }
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? totalMovies - visibleCount : prevIndex - 1
+    );
   };
 
   const handleNext = () => {
-    if (currentIndex < totalMovies - visibleCount) {
-      setCurrentIndex((prevIndex) => prevIndex + 1);
-    }
+    setCurrentIndex((prevIndex) =>
+      prevIndex >= totalMovies - visibleCount ? 0 : prevIndex + 1
+    );
   };
 
   const handleSelectMovie = async (movieId: string) => {
@@ -57,7 +57,7 @@ export default function MultiSlider({ movies }: MovieSliderProps) {
         image: res.data.image,
         actor: res.data.actor,
         actor_images: null,
-        episodes: [],
+        episodes: res.data.episodes ?? [],
       };
       if (res.success) {
         setMovie(movieData);
@@ -95,28 +95,23 @@ export default function MultiSlider({ movies }: MovieSliderProps) {
 
       <button
         onClick={handlePrev}
-        disabled={currentIndex === 0}
-        className={` absolute opacity-90 focus:opacity-60 top-1/2 left-0 transform -translate-y-1/2 px-2 py-1 rounded-full ${
-          currentIndex === 0
-            ? 'bg-gray-300 cursor-not-allowed'
-            : 'bg-gray-600 hover:bg-gray-700 '
+        className={` absolute opacity-90 focus:opacity-60 top-1/2 left-2 transform -translate-y-1/2 px-2 py-1 rounded-full ${
+          currentIndex === 0 && 'bg-gray-600 hover:bg-gray-700 '
         }`}
       >
         <Image
           height={20}
           alt=""
           src={ArrowLeft}
-          className="w-full h-auto object-cover opacity-50"
+          className="w-full md:h-full h-[50%] object-cover opacity-50"
         />
       </button>
 
       <button
         onClick={handleNext}
-        disabled={currentIndex >= totalMovies - visibleCount}
-        className={`absolute opacity-90 focus:opacity-60 top-1/2 right-0 transform -translate-y-1/2 px-2 py-1 rounded-full ${
-          currentIndex >= totalMovies - visibleCount
-            ? 'bg-gray-300 cursor-not-allowed'
-            : 'bg-gray-600 hover:bg-gray-700 '
+        className={`absolute opacity-90 focus:opacity-60 top-1/2 right-2 transform -translate-y-1/2 px-2 py-1 rounded-full ${
+          currentIndex >= totalMovies - visibleCount &&
+          'bg-gray-600 hover:bg-gray-700 '
         }`}
       >
         <Image

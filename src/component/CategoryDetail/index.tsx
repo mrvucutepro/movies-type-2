@@ -7,7 +7,6 @@ import PaginationButton from '../Base/PaginationButton';
 import { CategoryType, ITEMS_PER_PAGE, MovieType } from '@/libs/type';
 import { handleFetchMovieByID, handleFetchMovies } from '@/services/movie';
 import { useMovie } from '@/hooks/useMoviesContext';
-import { useLoading } from '@/contexts/LoadingContext';
 
 export default function CategoryDetail({ id, name }: CategoryType) {
   const [movies, setMovies] = useState<MovieType[]>([]);
@@ -16,20 +15,16 @@ export default function CategoryDetail({ id, name }: CategoryType) {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageGroup, setPageGroup] = useState(1);
   const buttonPerPage = 5;
-  const { showLoading, hideLoading } = useLoading();
   const [moviesCache, setMoviesCache] = useState<{
     [page: number]: MovieType[];
   }>({});
 
   const fetchMovies = async (page: number, limit: number) => {
     try {
-      showLoading();
       const res = await handleFetchMovies(page, limit, id);
-
       if (res.success) {
         setMovies(res.data.movies);
         setTotalPages(Math.ceil(res.data.total / limit));
-        // setMoviesCache((prev) => ({ ...prev, [page]: res.data.movies }));
         if (!moviesCache[page + 1] && page + 1 <= totalPages) {
           const nextRes = await handleFetchMovies(page + 1, limit, id);
           if (nextRes.success) {
@@ -51,8 +46,6 @@ export default function CategoryDetail({ id, name }: CategoryType) {
       }
     } catch (error) {
       console.error('Error fetching movies:', error);
-    } finally {
-      hideLoading();
     }
   };
 
@@ -87,6 +80,9 @@ export default function CategoryDetail({ id, name }: CategoryType) {
       setPageGroup(pageGroup - 1);
     }
   };
+
+  console.log(currentPage);
+  console.log(moviesCache);
 
   const handleSelectMovie = async (movieId: string) => {
     try {
