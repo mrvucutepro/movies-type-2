@@ -9,11 +9,11 @@ export default function MovieInfomation() {
   return (
     <div className="md:flex  m-4 p-4 items-center  justify-items-center bg-[#313131]  rounded-sm">
       <Image
-        src={movie?.image ?? ''}
+        src={movie?.image || ''}
         alt=""
         height={0}
         width={200}
-        className="h-[30vh] flex  object-contain"
+        className="h-[30vh] flex object-contain"
       />
       <div className="gap-4 grid max-w-[100%] my-24 md:mx-24">
         <span className="font-bold text-2xl">위드아웃 리모스 (2021)</span>

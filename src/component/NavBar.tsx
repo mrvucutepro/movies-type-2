@@ -1,43 +1,44 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import Button from './Base/Button';
 import { handleFetchCategories } from '@/services/category';
 import { CategoryType, FetchCategoriesResponse } from '@/libs/type';
 import { useMovie } from '@/hooks/useMoviesContext';
+import { useRouter } from 'next/navigation';
 
-export default function NavBar({
-  onCategorySelect,
-}: {
-  onCategorySelect: (category: CategoryType | null) => void;
-}) {
-  const [categories, setCategories] = useState<CategoryType[]>([]);
+export default function NavBar() {
+  // const [categories, setCategories] = useState<CategoryType[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(
     null
   );
-  const { setMovie } = useMovie();
+  const { setMovie, setCategory, categories } = useMovie();
+  const router = useRouter();
+  // useEffect(() => {
+  //   const fetchCategories = async () => {
+  //     try {
+  //       const res: FetchCategoriesResponse = await handleFetchCategories();
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const res: FetchCategoriesResponse = await handleFetchCategories();
+  //       if (res.success) {
+  //         const homeCategory = { id: 0, name: 'Home' };
+  //         const updatedCategories = [homeCategory, ...res.data];
+  //         setCategories(updatedCategories);
+  //       }
+  //     } catch (err) {
+  //       console.error('Error fetching categories:', err);
+  //     }
+  //   };
 
-        if (res.success) {
-          const homeCategory = { id: 0, name: 'Home' };
-          const updatedCategories = [homeCategory, ...res.data];
-          setCategories(updatedCategories);
-        }
-      } catch (err) {
-        console.error('Error fetching categories:', err);
-      }
-    };
-
-    fetchCategories();
-  }, []);
+  //   fetchCategories();
+  // }, []);
 
   const handleCategoryClick = async (category: CategoryType) => {
     try {
       setMovie(null);
       setSelectedCategory(category);
-      onCategorySelect(category);
+      setCategory(category);
+      const categoryPath = category.id === 0 ? '/' : `/category/${category.id}`;
+      router.push(categoryPath);
     } catch (error) {
       console.error('Error while fetching movies:', error);
     }
@@ -45,7 +46,7 @@ export default function NavBar({
 
   return (
     <ul className=" flex-col space-y-2 bg-[#313131] w-32 md:flex hidden">
-      {categories.map((item) => (
+      {categories?.map((item) => (
         <li
           key={item.id}
           className={`mx-auto flex justify-center border-b-0 ${

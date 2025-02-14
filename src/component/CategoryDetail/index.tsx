@@ -1,20 +1,22 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import MovieIcon from '@/assets/icons/ic_baseline-local-movies.png';
 import CardMovie from '../CardMovie';
-// import { paginate } from '@/libs/helpers/pagonationHelper';
 import PaginationButton from '../Base/PaginationButton';
 import { CategoryType, ITEMS_PER_PAGE, MovieType } from '@/libs/type';
-import { handleFetchMovieByID, handleFetchMovies } from '@/services/movie';
-import { useMovie } from '@/hooks/useMoviesContext';
+import { handleFetchMovies } from '@/services/movie';
+// import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export default function CategoryDetail({ id, name }: CategoryType) {
   const [movies, setMovies] = useState<MovieType[]>([]);
-  const { setMovie } = useMovie();
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageGroup, setPageGroup] = useState(1);
   const buttonPerPage = 5;
+  const router = useRouter();
   const [moviesCache, setMoviesCache] = useState<{
     [page: number]: MovieType[];
   }>({});
@@ -81,29 +83,8 @@ export default function CategoryDetail({ id, name }: CategoryType) {
     }
   };
 
-  console.log(currentPage);
-  console.log(moviesCache);
-
-  const handleSelectMovie = async (movieId: string) => {
-    try {
-      const res = await handleFetchMovieByID(movieId);
-      const movieData: MovieType = {
-        id: res.data.id,
-        title_id: parseInt(res.data.id),
-        title: res.data.des,
-        des: res.data.des,
-        cate_id: res.data.cate_id,
-        image: res.data.image,
-        actor: res.data.actor,
-        actor_images: null,
-        episodes: [],
-      };
-      if (res.success) {
-        setMovie(movieData);
-      }
-    } catch (error) {
-      console.error('Error fetching movie id:', error);
-    }
+  const handleSelectMovie = (movieId: string) => {
+    router.push(`/movie/${movieId}`);
   };
 
   return (

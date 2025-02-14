@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import Hls from 'hls.js';
 import Spinner from '../Spinner';
+import ReactPlayer from 'react-player';
+import Image from 'next/image';
 
 export default function MoviePlayer({
   videoUrl,
@@ -17,21 +19,6 @@ export default function MoviePlayer({
     setIsLoading(true);
     setError(false);
   }, [videoUrl]);
-
-  // useEffect(() => {
-  //   if (Hls.isSupported() && videoUrl.endsWith('.m3u8')) {
-  //     const hls = new Hls();
-  //     if (videoRef.current) {
-  //       hls.loadSource(videoUrl);
-  //       hls.attachMedia(videoRef.current);
-  //     }
-  //     return () => {
-  //       hls.destroy();
-  //     };
-  //   } else if (videoRef.current) {
-  //     videoRef.current.src = videoUrl;
-  //   }
-  // }, [videoUrl]);
 
   useEffect(() => {
     if (!videoUrl || !videoRef.current) return;
@@ -69,14 +56,22 @@ export default function MoviePlayer({
   if (!videoUrl) {
     return (
       <>
-        <div className="mt-4 h-[680px] px-4 items-center flex justify-center text-gray-500">
-          Cannot loading movie
+        <div className="relative mt-4 h-[680px] px-4 items-center flex justify-center text-gray-500">
+          <Image
+            src={thumbnail}
+            className="h-full w-full"
+            alt=""
+            height={100}
+            width={100}
+          />
+          <div className="absolute z-10">Cannot loading movie</div>
         </div>
       </>
     );
   }
+
   return (
-    <div className="mt-4 px-4 relative">
+    <div className="mt-4 px-4 relative h-[50%] ">
       {isLoading && !error && (
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <Spinner size="xl" />
@@ -88,7 +83,7 @@ export default function MoviePlayer({
         </div>
       )}
       {!error && (
-        <video
+        <ReactPlayer
           src={videoUrl}
           poster={thumbnail}
           className={`w-[100vw] ${isLoading ? 'opacity-0' : 'opacity-100'}`}

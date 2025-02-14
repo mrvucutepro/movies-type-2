@@ -14,7 +14,7 @@ export default function ImageCustom({
         <Image
           src={movieImage}
           alt="Movie Thumbnail"
-          className="object-cover w-full h-[50vh] bg-[#EA1616] rounded-lg group-hover:scale-105 transform transition-transform duration-300"
+          className="object-cover w-full h-[40vh] xl:h-[40vh] lg:h-[30vh] rounded-lg group-hover:scale-105 transform transition-transform duration-300"
           height={0}
           width={600}
         />

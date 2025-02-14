@@ -1,5 +1,5 @@
 // import { useMovie } from '@/hooks/useMoviesContext';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Episode from '../Episode';
 import MovieInfomation from '../MovieInfomation';
 import Comment from '../Comment/CommentWriteArea';
@@ -8,7 +8,7 @@ import MoviePlayer from '../MoviePlayer.tsx';
 import { useMovie } from '@/hooks/useMoviesContext';
 
 export default function DetailMovie() {
-  const { movie } = useMovie();
+  const { movie, setMovie } = useMovie();
   const [videoUrl, setVideoUrl] = useState('');
   const [thumbnaiUrl, setThumbnailUrl] = useState('');
 
@@ -16,6 +16,10 @@ export default function DetailMovie() {
     setVideoUrl(url);
     setThumbnailUrl(movie?.image ?? '');
   };
+
+  useEffect(() => {
+    setMovie(null);
+  }, [setMovie]);
 
   return (
     <>

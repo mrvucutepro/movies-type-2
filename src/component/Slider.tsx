@@ -23,7 +23,7 @@ const Slider = () => {
         navigation
         loop={true}
         spaceBetween={0}
-        slidesPerView={3}
+        slidesPerView={'auto'}
         centeredSlides={true}
         onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
         style={{ height: '60vh', overflow: 'hidden' }}
@@ -33,31 +33,21 @@ const Slider = () => {
             key={index}
             style={{
               display: 'flex',
-              justifyContent: 'center',
+              justifyContent: index === activeIndex ? 'center' : 'space-evenly',
               alignItems: 'center',
             }}
           >
             <div
               style={{
                 position: 'relative',
-                width: index === activeIndex ? '80%' : '20%',
+                width: index === activeIndex ? '100%' : '20%',
                 transition: 'width 0.3s ease',
                 height: '100%',
+                // width: '100%',
                 overflow: 'hidden',
               }}
             >
-              {index !== activeIndex && (
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    zIndex: 1,
-                  }}
-                />
-              )}
+              {index !== activeIndex && <div />}
               <Image
                 src={slide.src}
                 alt=""

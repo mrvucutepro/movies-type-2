@@ -6,8 +6,7 @@ import Image from 'next/image';
 import ArrowLeft from '@/assets/icons/arrow-left.png';
 import ArrowRight from '@/assets/icons/arrow-right.png';
 import { MovieType } from '@/libs/type';
-import { useMovie } from '@/hooks/useMoviesContext';
-import { handleFetchMovieByID } from '@/services/movie';
+import { useRouter } from 'next/navigation';
 
 interface MovieSliderProps {
   movies: MovieType[];
@@ -15,11 +14,12 @@ interface MovieSliderProps {
 
 export default function MultiSlider({ movies }: MovieSliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { setMovie } = useMovie();
   const visibleCountDesktop = 5;
   const visibleCountMobile = 3;
   const [visibleCount, setVisibleCount] = useState(visibleCountDesktop);
   const totalMovies = movies.length;
+  const router = useRouter();
+
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 768) {
@@ -45,26 +45,8 @@ export default function MultiSlider({ movies }: MovieSliderProps) {
     );
   };
 
-  const handleSelectMovie = async (movieId: string) => {
-    try {
-      const res = await handleFetchMovieByID(movieId);
-      const movieData: MovieType = {
-        id: res.data.id,
-        title_id: parseInt(res.data.id),
-        title: res.data.des,
-        des: res.data.des,
-        cate_id: res.data.cate_id,
-        image: res.data.image,
-        actor: res.data.actor,
-        actor_images: null,
-        episodes: res.data.episodes ?? [],
-      };
-      if (res.success) {
-        setMovie(movieData);
-      }
-    } catch (error) {
-      console.error('Error fetching movie id:', error);
-    }
+  const handleSelectMovie = (movieId: string) => {
+    router.push(`/movie/${movieId}`);
   };
 
   return (

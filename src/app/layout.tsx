@@ -2,6 +2,12 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { LoadingProvider } from '@/contexts/LoadingContext';
 import { MovieProvider } from '@/hooks/useMoviesContext';
+import Header from '@/component/Header';
+import NavBar from '@/component/NavBar';
+import { NextUIProvider } from '@nextui-org/react';
+import Title from '@/component/Title';
+import Footer from '@/component/Footer';
+import MobileNav from '@/component/MobileNav';
 
 export const metadata: Metadata = {
   title: 'Movie Professional',
@@ -16,9 +22,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <LoadingProvider>
-          <MovieProvider>{children}</MovieProvider>
-        </LoadingProvider>
+        <NextUIProvider>
+          <LoadingProvider>
+            <MovieProvider>
+              <Header />
+              <Title />
+              <div className="flex">
+                <NavBar />
+                <main className="flex-1">{children}</main>
+              </div>
+              <Footer />
+              <MobileNav />
+            </MovieProvider>
+          </LoadingProvider>
+        </NextUIProvider>
       </body>
     </html>
   );

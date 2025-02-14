@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@heroui/skeleton": "^2.2.6",
+    "@nextui-org/react": "^2.6.11",
     "hls.js": "^1.5.20",
     "next": "15.1.6",
     "react": "^19.0.0",

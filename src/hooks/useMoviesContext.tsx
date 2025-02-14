@@ -1,13 +1,20 @@
 'use client';
 
-import { CategoryType, MovieType } from '@/libs/type';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import { CategoryType, FetchCategoriesResponse, MovieType } from '@/libs/type';
+import { handleFetchCategories } from '@/services/category';
+import { handleFetchMovieByID } from '@/services/movie';
+import React, { createContext, useState, useEffect } from 'react';
 
 interface MovieContextType {
   category: CategoryType | null;
   movie: MovieType | null;
-  // setMovie: (movie: MovieType) => void;
+  categories: CategoryType[] | null;
+  movies: MovieType[] | null;
+
   setMovie: React.Dispatch<React.SetStateAction<MovieType | null>>;
+  setCategories: React.Dispatch<React.SetStateAction<CategoryType[] | null>>;
+  setMovies: React.Dispatch<React.SetStateAction<MovieType[] | null>>;
+
   setCategory: React.Dispatch<React.SetStateAction<CategoryType | null>>;
 }
 
@@ -16,41 +23,114 @@ const MovieContext = createContext<MovieContextType | undefined>(undefined);
 export const MovieProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [movie, setMovie] = useState<MovieType | null>(() => {
-    const storedMovie = localStorage.getItem('movie');
-    return storedMovie ? JSON.parse(storedMovie) : null;
-  });
+  const [isClient, setIsClient] = useState(false);
+  const [movie, setMovie] = useState<MovieType | null>(null);
+  const [movies, setMovies] = useState<MovieType[] | null>(null);
 
-  const [category, setCategory] = useState<CategoryType | null>(() => {
-    const storedCategory = localStorage.getItem('category');
-    return storedCategory ? JSON.parse(storedCategory) : null;
-  });
+  const [category, setCategory] = useState<CategoryType | null>(null);
+  const [categories, setCategories] = useState<CategoryType[] | null>([]);
 
   useEffect(() => {
-    if (movie) {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res: FetchCategoriesResponse = await handleFetchCategories();
+
+        if (res.success) {
+          const homeCategory = { id: 0, name: 'Home' };
+          const updatedCategories = [homeCategory, ...res.data];
+          setCategories(updatedCategories);
+        }
+      } catch (err) {
+        console.error('Error fetching categories:', err);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  // useEffect(() => {
+  //   if (isClient) {
+  //     const storedMovie = localStorage.getItem('movie');
+  //     const storedCategory = localStorage.getItem('category');
+
+  //     if (storedMovie) setMovie(JSON.parse(storedMovie));
+  //     if (storedCategory) setCategory(JSON.parse(storedCategory));
+  //   }
+  // }, [isClient]);
+
+  // useEffect(() => {
+  //   if (isClient && movie) {
+  //     localStorage.setItem('movie', JSON.stringify(movie));
+  //   }
+  // }, [movie, isClient]);
+
+  // useEffect(() => {
+  //   if (isClient && category) {
+  //     localStorage.setItem('category', JSON.stringify(category));
+  //   }
+  // }, [category, isClient]);
+
+  useEffect(() => {
+    if (isClient) {
+      const storedMovie = localStorage.getItem('movie');
+      const storedMovies = localStorage.getItem('movies');
+      const storedCategory = localStorage.getItem('category');
+      const storedCategories = localStorage.getItem('categories');
+
+      if (storedMovie) setMovie(JSON.parse(storedMovie));
+      if (storedMovies) setMovies(JSON.parse(storedMovies));
+      if (storedCategory) setCategory(JSON.parse(storedCategory));
+      if (storedCategories) setCategories(JSON.parse(storedCategories));
+    }
+  }, [isClient]);
+
+  useEffect(() => {
+    if (isClient && movie) {
       localStorage.setItem('movie', JSON.stringify(movie));
-    } else {
-      localStorage.removeItem('movie');
     }
-  }, [movie]);
+  }, [movie, isClient]);
 
   useEffect(() => {
-    if (category) {
-      localStorage.setItem('category', JSON.stringify(category));
-    } else {
-      localStorage.removeItem('category');
+    if (isClient && movies) {
+      localStorage.setItem('movies', JSON.stringify(movies));
     }
-  }, [category]);
+  }, [movies, isClient]);
 
+  useEffect(() => {
+    if (isClient && category) {
+      localStorage.setItem('category', JSON.stringify(category));
+    }
+  }, [category, isClient]);
+
+  useEffect(() => {
+    if (isClient && categories) {
+      localStorage.setItem('categories', JSON.stringify(categories));
+    }
+  }, [categories, isClient]);
   return (
-    <MovieContext.Provider value={{ movie, setMovie, category, setCategory }}>
+    <MovieContext.Provider
+      value={{
+        movie,
+        movies,
+        category,
+        categories,
+        setMovie,
+        setMovies,
+        setCategory,
+        setCategories,
+      }}
+    >
       {children}
     </MovieContext.Provider>
   );
 };
 
-export const useMovie = (): MovieContextType => {
-  const context = useContext(MovieContext);
+export const useMovie = () => {
+  const context = React.useContext(MovieContext);
   if (!context) {
     throw new Error('useMovie must be used within a MovieProvider');
   }
