@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.noto-sans-kr-font {
+  font-family: "Noto Sans KR";
+}
+.swiper-button-prev,
+.swiper-button-next {
+  color: white !important;
+  width: 60px !important;
+  height: 60px !important;
+  background-color: #47474799;
+  border-radius: 50%;
+}
+.swiper-button-prev:after,
+.swiper-button-next:after {
+  font-size: 24px !important;
+}
+.reveal {
+  position: relative;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: 1.5s all ease;
+}
+
+.reveal.reveal-active {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.reveal-left {
+  position: relative;
+  transform: translateX(-100px);
+  opacity: 0;
+  transition: 1.5s all ease;
+}
+
+.reveal-left.reveal-left-active {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.reveal-right {
+  position: relative;
+  transform: translateX(100px);
+  opacity: 0;
+  transition: 1.5s all ease;
+}
+
+.reveal-right.reveal-right-active {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
+div::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
+div::-webkit-scrollbar-thumb {
+  background: #ff8a00;
+  border-radius: 20px;
+  border: 3px solid transparent;
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+div::-webkit-scrollbar {
+  background-color: transparent;
+  width: 3px;
+  height: 6px;
+}
